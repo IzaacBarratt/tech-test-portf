@@ -1,0 +1,20 @@
+.content {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.button {
+  cursor: pointer;
+  display: flex;
+  background-color: gray;
+  padding: 30px;
+  margin-bottom: 0;
+  line-height: 0;
+}
+
+.buttonDisabled {
+  opacity: 0.4;
+  cursor: none;
+}

@@ -1,8 +1,8 @@
 import Head from "next/head";
 import styles from "../../styles/Home.module.css";
-import { useQuery } from "@apollo/client";
-import { graphql } from "../../gql";
+import { useQuery, gql as graphql } from "@apollo/client";
 import { useRouter } from "next/router";
+import TaskPaginator from '../../components/TaskPaginator'
 
 const GET_TASK = graphql(`
   query GetTask($id: Int!) {
@@ -38,6 +38,8 @@ export default function Task() {
         <h1 className={styles.title}>Task {data.getTask.id}</h1>
         <h2 className={styles.description}>{data.getTask.title}</h2>
         <p className={styles.description}>{data.getTask.description}</p>
+
+        <TaskPaginator taskId={Number(taskId || 1)} />
       </main>
     </div>
   );
