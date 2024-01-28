@@ -1,7 +1,32 @@
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
+import { useState } from "react";
+import CreateTaskForm from "../components/CreateTaskForm";
+import { Task } from "@prisma/client";
+import { useQuery, gql as graphql } from "@apollo/client";
+import TaskList from "../components/TaskList";
+
+const GET_ALL_TASKS = graphql(`
+  query GetTasks() {
+    getTasks {
+      id
+      title
+      description
+    }
+  }
+`);
 
 export default function Home() {
+  const [isTaskFormOpen, setIsTaskFormOpen] = useState(false)
+
+  // const 
+
+  const toggleCreateTaskForm = () => setIsTaskFormOpen(!isTaskFormOpen)
+  const handleTaskCreated = (data: Task) => {
+    console.log(data)
+    toggleCreateTaskForm();
+  }
+
   return (
     <div className={styles.container}>
       <Head>
@@ -21,6 +46,11 @@ export default function Home() {
             <code className={styles.code}>pages/api/graphql.js</code>
           </a>
         </p>
+
+        <button onClick={toggleCreateTaskForm}>+ Create Task +</button>
+        {isTaskFormOpen ? <CreateTaskForm onComplete={handleTaskCreated} /> : null}
+
+        <TaskList tasks={[]} />
 
         <p className={styles.description}>
           <a href="/task/1" target="_blank">

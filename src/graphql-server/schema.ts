@@ -33,6 +33,17 @@ export const schema = makeSchema({
       },
     }),
     objectType({
+      name: "Query",
+      definition(t) {
+        t.field("getTasks", {
+          type: "Task",
+          resolve: (_parent, args, ctx: Context) => {
+            return ctx.prisma.task.findMany();
+          },
+        });
+      },
+    }),
+    objectType({
       name: "Mutation",
       definition(t) {
         t.nonNull.field("createTask", {

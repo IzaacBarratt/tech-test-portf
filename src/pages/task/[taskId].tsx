@@ -3,8 +3,6 @@ import styles from "../../styles/Home.module.css";
 import { useQuery, gql as graphql } from "@apollo/client";
 import { useRouter } from "next/router";
 import TaskPaginator from '../../components/TaskPaginator'
-import { FormEvent, FormEventHandler, useState } from "react";
-import CreateTaskForm from "../../components/CreateTaskForm";
 import { Task } from "@prisma/client";
 
 const GET_TASK = graphql(`
@@ -17,11 +15,8 @@ const GET_TASK = graphql(`
   }
 `);
 
-
-
 export default function Task() {
   const { query } = useRouter();
-  const [isTaskFormOpen, setIsTaskFormOpen] = useState(false)
 
   const taskId =
     typeof query["taskId"] === "string" ? query["taskId"] : undefined;
@@ -33,13 +28,6 @@ export default function Task() {
   if (!data) {
     return null;
   }
-
-  const toggleCreateTaskForm = () => setIsTaskFormOpen(!isTaskFormOpen)
-  const handleTaskCreated = (data: Task) => {
-    console.log(data)
-    toggleCreateTaskForm();
-  }
-
 
   return (
     <div className={styles.container}>
@@ -53,10 +41,7 @@ export default function Task() {
         <h2 className={styles.description}>{data.getTask.title}</h2>
         <p className={styles.description}>{data.getTask.description}</p>
 
-        <button onClick={toggleCreateTaskForm}>+ Create Task +</button>
-        {isTaskFormOpen ? <CreateTaskForm onComplete={handleTaskCreated} /> : null}
         <TaskPaginator taskId={Number(taskId || 1)} />
-
       </main>
     </div>
   );
