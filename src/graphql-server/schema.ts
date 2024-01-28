@@ -19,28 +19,23 @@ export const schema = makeSchema({
     objectType({
       name: "Query",
       definition(t) {
-        t.field("getTask", {
-          type: "Task",
-          args: {
-            id: nonNull(intArg()),
-          },
-          resolve: (_parent, args, ctx: Context) => {
-            return ctx.prisma.task.findUnique({
-              where: { id: args.id },
-            });
-          },
-        });
-      },
-    }),
-    objectType({
-      name: "Query",
-      definition(t) {
         t.field("getTasks", {
           type: "Task",
           resolve: (_parent, args, ctx: Context) => {
             return ctx.prisma.task.findMany();
           },
-        });
+        }),
+          t.field("getTask", {
+            type: "Task",
+            args: {
+              id: nonNull(intArg()),
+            },
+            resolve: (_parent, args, ctx: Context) => {
+              return ctx.prisma.task.findUnique({
+                where: { id: args.id },
+              });
+            },
+          });
       },
     }),
     objectType({

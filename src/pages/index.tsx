@@ -6,15 +6,15 @@ import { Task } from "@prisma/client";
 import { useQuery, gql as graphql } from "@apollo/client";
 import TaskList from "../components/TaskList";
 
-const GET_ALL_TASKS = graphql(`
-  query GetTasks() {
-    getTasks {
-      id
-      title
-      description
-    }
-  }
-`);
+// const GET_ALL_TASKS = graphql(`
+//   query GetTasks() {
+//     getTasks {
+//       id
+//       title
+//       description
+//     }
+//   }
+// `);
 
 export default function Home() {
   const [isTaskFormOpen, setIsTaskFormOpen] = useState(false)
