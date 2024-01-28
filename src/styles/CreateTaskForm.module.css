@@ -1,0 +1,16 @@
+.form {
+  padding: 30px;
+  background-color: lightgray;
+}
+
+.form input {
+  display: block;
+}
+.form select {
+  display: block;
+  width: 100%;
+}
+
+.form button {
+  margin-top: 30px;
+}
