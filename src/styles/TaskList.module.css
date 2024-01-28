@@ -1,0 +1,14 @@
+.taskContainer {
+  padding: 20px;
+  background-color: lightgray;
+}
+
+.taskContainer ul {
+  list-style: none;
+  padding: 0;
+}
+
+.taskContainer li {
+  padding: 5px;
+  border: 1px solid black;
+}
