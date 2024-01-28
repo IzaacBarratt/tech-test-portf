@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import TaskPaginator from '../../components/TaskPaginator'
 import { FormEvent, FormEventHandler, useState } from "react";
 import CreateTaskForm from "../../components/CreateTaskForm";
+import { Task } from "nexus-prisma";
 
 const GET_TASK = graphql(`
   query GetTask($id: Int!) {
@@ -33,23 +34,12 @@ export default function Task() {
     return null;
   }
 
-  // function createTaskFromForm(e: FormEvent<HTMLFormElement>) {
-  //   e.preventDefault();
-
-  //   const { title, description, status } = e.currentTarget;
-
-  //   const taskData = {
-  //     title,
-  //     description,
-  //     status
-  //   }
-
-  //   const { data } = useQuery(CREATE_TASK, {
-  //     variables: taskData
-  //   })
-  // }
-
   const toggleCreateTaskForm = () => setIsTaskFormOpen(!isTaskFormOpen)
+  const handleTaskCreated = (data: Task) => {
+    console.log(data)
+    toggleCreateTaskForm();
+  }
+
 
   return (
     <div className={styles.container}>
@@ -64,9 +54,9 @@ export default function Task() {
         <p className={styles.description}>{data.getTask.description}</p>
 
         <button onClick={toggleCreateTaskForm}>+ Create Task +</button>
-        {isTaskFormOpen ? <CreateTaskForm /> : null}
-
+        {isTaskFormOpen ? <CreateTaskForm onComplete={handleTaskCreated} /> : null}
         <TaskPaginator taskId={Number(taskId || 1)} />
+
       </main>
     </div>
   );

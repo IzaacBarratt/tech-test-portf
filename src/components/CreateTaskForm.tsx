@@ -21,7 +21,11 @@ type CreateTaskFormFields = {
 }
 
 function CreateTaskForm({ onComplete }) {
-    const [createTaskMutation, { data, loading, error }] = useMutation(CREATE_TASK)
+    const [createTaskMutation, { data, loading, error }] = useMutation(CREATE_TASK, {
+        onCompleted(data) {
+            onComplete(data)
+        }
+    })
     const [formData, setFormData] = useState<CreateTaskFormFields>({ title: '', description: '', status: 'To Do' })
 
     function processCreateTaskForm(e: FormEvent<HTMLFormElement>) {
@@ -44,8 +48,6 @@ function CreateTaskForm({ onComplete }) {
             [name]: value
         })
     }
-
-    console.log(data)
 
     if (loading) return <div className={styles.form}>
         <p>Submitting...</p>
