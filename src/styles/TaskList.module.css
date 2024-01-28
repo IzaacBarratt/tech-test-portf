@@ -1,5 +1,4 @@
 .taskContainer {
-  padding: 20px;
   background-color: lightgray;
 }
 
@@ -8,14 +7,11 @@
   padding: 0;
 }
 
-.header {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+.taskContainer li {
+  min-width: 200px;
 }
 
-.taskContainer li {
-  width: 300px;
-  padding: 5px;
-  border: 1px solid black;
+.header {
+  display: flex;
+  justify-content: space-between;
 }

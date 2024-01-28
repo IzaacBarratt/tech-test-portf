@@ -2,7 +2,6 @@ import Head from "next/head";
 import styles from "../../styles/Home.module.css";
 import { useQuery, gql as graphql } from "@apollo/client";
 import { useRouter } from "next/router";
-import TaskPaginator from '../../components/TaskPaginator'
 import { Task } from "@prisma/client";
 
 const GET_TASK = graphql(`
@@ -38,6 +37,8 @@ export default function Task() {
         <title>Task {data.getTask.id}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
+
+
 
       <main className={styles.main}>
         <h1 className={styles.title}>Task {data.getTask.id}</h1>

@@ -67,7 +67,6 @@ export default function Home() {
     })
   }
 
-
   function deleteTask(id: Number) {
     deleteTaskMutation({
       variables: { deleteTaskId: id }
@@ -83,27 +82,25 @@ export default function Home() {
       </Head>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>Welcome to the Task Manager</h1>
+        <header className={styles.header}>
+          <h1 className={styles.title}>Task Manager</h1>
+          <button onClick={toggleCreateTaskForm}>+ Create Task +</button>
+        </header>
 
-        <p className={styles.description}>Please read the README.md</p>
-
-        <p className={styles.description}>
-          GraphQL API located at
-          <a href="/api/graphql" target="_blank">
-            <code className={styles.code}>pages/api/graphql.js</code>
-          </a>
-        </p>
-
-        <button onClick={toggleCreateTaskForm}>+ Create Task +</button>
-        {isTaskFormOpen ? <CreateTaskForm error={taskCreateError} loading={taskCreateLoading} onFormSubmit={handleTaskCreate} /> : null}
-
+        {isTaskFormOpen
+          ? <div className={styles.formContainer} onClick={toggleCreateTaskForm}>
+            <div className={styles.form} onClick={(e) => e.stopPropagation()}>
+              <CreateTaskForm
+                error={taskCreateError}
+                loading={taskCreateLoading}
+                onFormSubmit={handleTaskCreate}
+              />
+            </div>
+          </div>
+          : null
+        }
         <TaskList onDeleteTask={deleteTask} tasks={tasks || []} />
 
-        <p className={styles.description}>
-          <a href="/task/1" target="_blank">
-            First task
-          </a>
-        </p>
       </main>
     </div>
   );

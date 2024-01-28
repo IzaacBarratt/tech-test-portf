@@ -1,14 +1,14 @@
 .form {
   padding: 30px;
+  border-radius: 10px;
   background-color: lightgray;
+  max-height: 300px;
 }
 
-.form input {
-  display: block;
-}
+.form input,
 .form select {
-  display: block;
   width: 100%;
+  display: block;
 }
 
 .form button {
