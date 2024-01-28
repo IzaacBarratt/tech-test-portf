@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import TaskPaginator from '../../components/TaskPaginator'
 import { FormEvent, FormEventHandler, useState } from "react";
 import CreateTaskForm from "../../components/CreateTaskForm";
-import { Task } from "nexus-prisma";
+import { Task } from "@prisma/client";
 
 const GET_TASK = graphql(`
   query GetTask($id: Int!) {
