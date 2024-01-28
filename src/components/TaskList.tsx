@@ -5,8 +5,9 @@ function TaskList(props: { tasks: Task[], onDeleteTask: (id: Number) => void }) 
     const { tasks, onDeleteTask } = props;
 
     return <div className={styles.taskContainer}>
+        <h5>Tasks: {tasks.length}</h5>
         <ul>
-            {tasks.map((n) => (
+            {tasks?.map((n) => (
                 <li key={n.id + '-task'}>
                     <div className={styles.header}>
                         <h3>{n.id}</h3>

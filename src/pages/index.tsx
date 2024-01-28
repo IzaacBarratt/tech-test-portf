@@ -6,8 +6,6 @@ import { useQuery, gql as graphql, useMutation } from "@apollo/client";
 import TaskList from "../components/TaskList";
 import { Task } from "@prisma/client";
 
-
-
 const GET_TASKS = graphql(`
   query GetTasks {
     getTasks {
@@ -19,6 +17,16 @@ const GET_TASKS = graphql(`
     }
   }
 `);
+
+const CREATE_TASK = graphql(`
+    mutation CreateTask($title: String!, $description: String, $status: String!) {
+        createTask(title: $title, description: $description, status: $status) {
+            title: title,
+            description: description,
+            status: status
+        }
+    }`
+)
 
 const DELETE_TASK = graphql(`
   mutation DeleteTask($deleteTaskId: Int!) {
@@ -35,21 +43,30 @@ export default function Home() {
   const { data } = useQuery(GET_TASKS);
   let tasks: Task[] = data?.getTasks
 
-  const [deleteTaskMutation, { loading, error }] = useMutation(DELETE_TASK, {
+  const [deleteTaskMutation, { loading: deleteTaskLoad, error: deleteTaskError }] = useMutation(DELETE_TASK, {
     onCompleted() {
-      if (error) {
-        alert(error.message)
-      } else {
-
-        alert('should delete id of task')
+      if (deleteTaskError) {
+        alert(deleteTaskError.message)
       }
-    }
+    },
+    refetchQueries: [GET_TASKS]
   })
 
   const toggleCreateTaskForm = () => setIsTaskFormOpen(!isTaskFormOpen)
-  const handleTaskCreated = (data: Task) => {
-    toggleCreateTaskForm();
+
+  const [createTaskMutation, { data: taskCreateData, loading: taskCreateLoading, error: taskCreateError }] = useMutation(CREATE_TASK, {
+    onCompleted() {
+      toggleCreateTaskForm();
+    },
+    refetchQueries: [GET_TASKS]
+  })
+
+  function handleTaskCreate(data: Task) {
+    createTaskMutation({
+      variables: data
+    })
   }
+
 
   function deleteTask(id: Number) {
     deleteTaskMutation({
@@ -78,13 +95,9 @@ export default function Home() {
         </p>
 
         <button onClick={toggleCreateTaskForm}>+ Create Task +</button>
-        {isTaskFormOpen ? <CreateTaskForm onComplete={handleTaskCreated} /> : null}
+        {isTaskFormOpen ? <CreateTaskForm error={taskCreateError} loading={taskCreateLoading} onFormSubmit={handleTaskCreate} /> : null}
 
-        {
-          (tasks != null && tasks.length > 0)
-            ? <TaskList onDeleteTask={deleteTask} tasks={tasks} />
-            : <p>No tasks found</p>
-        }
+        <TaskList onDeleteTask={deleteTask} tasks={tasks || []} />
 
         <p className={styles.description}>
           <a href="/task/1" target="_blank">

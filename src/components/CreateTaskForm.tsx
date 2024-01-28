@@ -2,16 +2,6 @@ import { FormEvent, useState } from 'react';
 import styles from '../styles/CreateTaskForm.module.css'
 import { gql as graphql, useMutation } from "@apollo/client";
 
-const CREATE_TASK = graphql(`
-    mutation CreateTask($title: String!, $description: String, $status: String!) {
-        createTask(title: $title, description: $description, status: $status) {
-            title: title,
-            description: description,
-            status: status
-        }
-    }`
-)
-
 type TaskStatus = "In Progress" | "To Do" | "Done"
 
 type CreateTaskFormFields = {
@@ -20,22 +10,13 @@ type CreateTaskFormFields = {
     status: TaskStatus
 }
 
-function CreateTaskForm({ onComplete }) {
-    const [createTaskMutation, { data, loading, error }] = useMutation(CREATE_TASK, {
-        onCompleted(data) {
-            onComplete(data)
-        }
-    })
+function CreateTaskForm({ onFormSubmit, loading, error }) {
     const [formData, setFormData] = useState<CreateTaskFormFields>({ title: '', description: '', status: 'To Do' })
 
     function processCreateTaskForm(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
-
         const taskData = formData;
-
-        createTaskMutation({
-            variables: taskData,
-        })
+        onFormSubmit(taskData)
     }
 
     // Use the FORM name="" to update the form data 
