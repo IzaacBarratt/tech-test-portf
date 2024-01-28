@@ -41,23 +41,36 @@ export const schema = makeSchema({
     objectType({
       name: "Mutation",
       definition(t) {
-        t.nonNull.field("createTask", {
+        t.nonNull.field("deleteTask", {
           type: "Task",
           args: {
-            description: stringArg(),
-            title: nonNull(stringArg()),
-            status: nonNull(stringArg()),
+            id: nonNull(intArg()),
           },
           resolve: (_, args, ctx: Context) => {
-            return ctx.prisma.task.create({
-              data: {
-                description: args.description,
-                title: args.title,
-                status: args.status,
+            return ctx.prisma.task.delete({
+              where: {
+                id: args.id,
               },
             });
           },
-        });
+        }),
+          t.nonNull.field("createTask", {
+            type: "Task",
+            args: {
+              description: stringArg(),
+              title: nonNull(stringArg()),
+              status: nonNull(stringArg()),
+            },
+            resolve: (_, args, ctx: Context) => {
+              return ctx.prisma.task.create({
+                data: {
+                  description: args.description,
+                  title: args.title,
+                  status: args.status,
+                },
+              });
+            },
+          });
       },
     }),
     objectType({

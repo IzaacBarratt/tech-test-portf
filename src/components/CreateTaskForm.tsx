@@ -1,4 +1,4 @@
-import { ChangeEventHandler, FormEvent, useState } from 'react';
+import { FormEvent, useState } from 'react';
 import styles from '../styles/CreateTaskForm.module.css'
 import { gql as graphql, useMutation } from "@apollo/client";
 

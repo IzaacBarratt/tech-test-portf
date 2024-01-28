@@ -2,7 +2,7 @@ import Head from "next/head";
 import styles from "../styles/Home.module.css";
 import { useState } from "react";
 import CreateTaskForm from "../components/CreateTaskForm";
-import { useQuery, gql as graphql } from "@apollo/client";
+import { useQuery, gql as graphql, useMutation } from "@apollo/client";
 import TaskList from "../components/TaskList";
 import { Task } from "@prisma/client";
 
@@ -20,16 +20,41 @@ const GET_TASKS = graphql(`
   }
 `);
 
+const DELETE_TASK = graphql(`
+  mutation DeleteTask($deleteTaskId: Int!) {
+    deleteTask(id: $deleteTaskId) {
+      createdAt
+      id
+    }
+  }
+`);
+
 export default function Home() {
   const [isTaskFormOpen, setIsTaskFormOpen] = useState(false)
 
   const { data } = useQuery(GET_TASKS);
-  const tasks: Task[] = data?.getTasks
+  let tasks: Task[] = data?.getTasks
+
+  const [deleteTaskMutation, { loading, error }] = useMutation(DELETE_TASK, {
+    onCompleted() {
+      if (error) {
+        alert(error.message)
+      } else {
+
+        alert('should delete id of task')
+      }
+    }
+  })
 
   const toggleCreateTaskForm = () => setIsTaskFormOpen(!isTaskFormOpen)
   const handleTaskCreated = (data: Task) => {
-    console.log(data)
     toggleCreateTaskForm();
+  }
+
+  function deleteTask(id: Number) {
+    deleteTaskMutation({
+      variables: { deleteTaskId: id }
+    })
   }
 
   return (
@@ -57,10 +82,9 @@ export default function Home() {
 
         {
           (tasks != null && tasks.length > 0)
-            ? <TaskList tasks={tasks} />
+            ? <TaskList onDeleteTask={deleteTask} tasks={tasks} />
             : <p>No tasks found</p>
         }
-
 
         <p className={styles.description}>
           <a href="/task/1" target="_blank">
