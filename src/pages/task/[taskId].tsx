@@ -28,6 +28,9 @@ export default function Task() {
   if (!data) {
     return null;
   }
+  if (!data.getTask) {
+    return <h1>Record not found (404)</h1>
+  }
 
   return (
     <div className={styles.container}>
