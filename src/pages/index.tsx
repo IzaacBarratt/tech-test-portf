@@ -61,7 +61,7 @@ export default function Home() {
     refetchQueries: [GET_TASKS]
   })
 
-  function handleTaskCreate(data: Task) {
+  function handleTaskCreate(data) {
     createTaskMutation({
       variables: data
     })
@@ -91,9 +91,10 @@ export default function Home() {
           ? <div className={styles.formContainer} onClick={toggleCreateTaskForm}>
             <div className={styles.form} onClick={(e) => e.stopPropagation()}>
               <CreateTaskForm
-                error={taskCreateError}
+                error={taskCreateError?.message}
                 loading={taskCreateLoading}
                 onFormSubmit={handleTaskCreate}
+                taskType="TASK"
               />
             </div>
           </div>

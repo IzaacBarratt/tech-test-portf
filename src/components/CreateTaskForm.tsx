@@ -4,14 +4,28 @@ import { gql as graphql, useMutation } from "@apollo/client";
 
 type TaskStatus = "In Progress" | "To Do" | "Done"
 
+type TaskType = "TASK" | "SUBTASK"
+
 type CreateTaskFormFields = {
     title: string,
     description?: string,
     status: TaskStatus
 }
 
-function CreateTaskForm({ onFormSubmit, loading, error }) {
+type CreateTaskFormProps = {
+    onFormSubmit: (data: CreateTaskFormFields) => void,
+    loading: boolean,
+    error: string,
+    taskType: TaskType
+}
+
+/*
+    Can work for both tasks and subtasks creation
+    use the taskType to differentate
+*/
+function CreateTaskForm(props: CreateTaskFormProps) {
     const [formData, setFormData] = useState<CreateTaskFormFields>({ title: '', description: '', status: 'To Do' })
+    const { onFormSubmit, loading, error, taskType } = props;
 
     function processCreateTaskForm(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
@@ -34,13 +48,17 @@ function CreateTaskForm({ onFormSubmit, loading, error }) {
         <p>Submitting...</p>
     </div>
     if (error) return <div className={styles.form}>
-        <p>Submission Error: {error.message}</p>
+        <p>Submission Error: {error}</p>
     </div>
 
     return <div className={styles.form}>
         <form onSubmit={processCreateTaskForm}>
             <input name="title" value={formData.title} placeholder="title" onChange={updateFormValue} required={true} />
-            <input name="description" value={formData.description} placeholder="description" onChange={updateFormValue} />
+            {
+                (taskType == "TASK")
+                    ? <input name="description" value={formData.description} placeholder="description" onChange={updateFormValue} />
+                    : null
+            }
             <select name="status" value={formData.status} onChange={updateFormValue} required={true}>
                 <option value="To Do">To Do</option>
                 <option value="In Progress">In Progress</option>

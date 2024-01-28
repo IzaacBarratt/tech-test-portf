@@ -8,7 +8,7 @@ function TaskList(props: { tasks: Task[], onDeleteTask: (id: Number) => void }) 
 
     return <div className={taskListStyles.taskContainer}>
         <h5>Tasks: {tasks.length}</h5>
-        <ul className={`${styles.grid} `}>
+        <ul className={styles.grid}>
             {tasks?.map((n) => (
                 <li className={styles.card} key={n.id + '-task'}>
 
