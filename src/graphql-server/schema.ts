@@ -19,7 +19,7 @@ export const schema = makeSchema({
     objectType({
       name: "Query",
       definition(t) {
-        t.field("getTasks", {
+        t.list.field("getTasks", {
           type: "Task",
           resolve: (_parent, args, ctx: Context) => {
             return ctx.prisma.task.findMany();
