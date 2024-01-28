@@ -44,7 +44,6 @@ export default function Task() {
         <h2 className={styles.description}>{data.getTask.title}</h2>
         <p className={styles.description}>{data.getTask.description}</p>
 
-        <TaskPaginator taskId={Number(taskId || 1)} />
       </main>
     </div>
   );
