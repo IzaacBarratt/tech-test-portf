@@ -74,6 +74,23 @@ export const schema = makeSchema({
               });
             },
           });
+        t.nonNull.field("updateTask", {
+          type: "Task",
+          args: {
+            status: stringArg(),
+            id: nonNull(intArg()),
+          },
+          resolve: (_, args, ctx: Context) => {
+            return ctx.prisma.task.update({
+              where: {
+                id: args.id,
+              },
+              data: {
+                status: args.status,
+              },
+            });
+          },
+        });
         t.nonNull.field("createSubtask", {
           type: "Subtask",
           args: {

@@ -1,7 +1,7 @@
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
 import { useState } from "react";
-import CreateTaskForm from "../components/CreateTaskForm";
+import CreateTaskForm, { TaskStatus } from "../components/CreateTaskForm";
 import { useQuery, gql as graphql, useMutation } from "@apollo/client";
 import TaskList from "../components/TaskList";
 import { Task } from "@prisma/client";
@@ -26,6 +26,15 @@ const CREATE_TASK = graphql(`
             status: status
         }
     }`
+)
+
+const UPDATE_TASK = graphql(`
+  mutation UpdateTask($status: String, $id: Int!) {
+    updateTask(status: $status, id: $id) {
+      id
+      status
+    }
+  }`
 )
 
 const DELETE_TASK = graphql(`
@@ -60,6 +69,22 @@ export default function Home() {
     },
     refetchQueries: [GET_TASKS]
   })
+
+  const [updateTaskMutation, { data: updateTaskData, loading: updateTaskLoading, error: taskUpdateError }] = useMutation(UPDATE_TASK, {
+    onCompleted() {
+      // toggleCreateTaskForm();
+    },
+    // refetchQueries: [GET_TASKS]
+  })
+
+  function handleUpdateTaskStatus(id: number, status: TaskStatus) {
+    updateTaskMutation({
+      variables: {
+        id,
+        status
+      }
+    })
+  }
 
   function handleTaskCreate(data) {
     createTaskMutation({
@@ -100,7 +125,7 @@ export default function Home() {
           </div>
           : null
         }
-        <TaskList onDeleteTask={deleteTask} tasks={tasks || []} />
+        <TaskList onDeleteTask={deleteTask} tasks={tasks || []} onUpdateTaskStatus={handleUpdateTaskStatus} />
 
       </main>
     </div>

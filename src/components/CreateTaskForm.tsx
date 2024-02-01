@@ -2,7 +2,7 @@ import { FormEvent, useState } from 'react';
 import styles from '../styles/CreateTaskForm.module.css'
 import { gql as graphql, useMutation } from "@apollo/client";
 
-type TaskStatus = "In Progress" | "To Do" | "Done"
+export type TaskStatus = "In Progress" | "To Do" | "Done"
 
 type TaskType = "TASK" | "SUBTASK"
 
